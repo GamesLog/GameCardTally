@@ -68,20 +68,38 @@
     #statistics {
       margin-top: 20px;
     }
+    .popupIcon {
+      position: absolute;
+      font-size: 24px;
+      color: white;
+      opacity: 0;
+      transition: transform 0.5s, opacity 0.5s;
+      pointer-events: none;
+    }
+    
+    .popupIcon.show {
+      opacity: 1;
+      transform: translateY(-30px);
+    }
   </style>
 </head>
 <body>
-  <h1>Card Reader Tally</h1>
+   <h1>Card Reader Tally</h1>
   
   <div>
     <button id="swipeButton">Successful Swipe</button>
+    <span id="swipePopupIcon" class="popupIcon">+1</span>
     <button id="errorButton">Error Swipe</button>
+    <span id="errorPopupIcon" class="popupIcon">+1</span>
   </div>
   
   <div>
     <button id="errorZeroButton" class="smallButton">Error 0</button>
+    <span id="errorZeroPopupIcon" class="popupIcon">+1</span>
     <button id="readerRebootButton" class="smallButton">Reader Reboot</button>
+    <span id="readerRebootPopupIcon" class="popupIcon">+1</span>
     <button id="otherButton" class="smallButton">Other</button>
+    <span id="otherPopupIcon" class="popupIcon">+1</span>
   </div>
   
   <div>
@@ -164,31 +182,44 @@
       updateStatistics();
     }
 
+    swipeButton    function showPopupIcon(popupIconId) {
+      const popupIcon = document.getElementById(popupIconId);
+      popupIcon.classList.add('show');
+      setTimeout(function() {
+        popupIcon.classList.remove('show');
+      }, 500);
+    }
+
     swipeButton.addEventListener('click', function() {
       totalSwipes++;
       updateData();
+      showPopupIcon('swipePopupIcon');
     });
 
     errorButton.addEventListener('click', function() {
       totalErrors++;
       updateData();
+      showPopupIcon('errorPopupIcon');
     });
 
     errorZeroButton.addEventListener('click', function() {
       errorZeroCount++;
       updateData();
+      showPopupIcon('errorZeroPopupIcon');
     });
 
     readerRebootButton.addEventListener('click', function() {
       readerRebootCount++;
       updateData();
+      showPopupIcon('readerRebootPopupIcon');
     });
 
     otherButton.addEventListener('click', function() {
       otherCount++;
       updateData();
+      showPopupIcon('otherPopupIcon');
     });
-
+    
     clearButton.addEventListener('click', function() {
       totalSwipes = 0;
       totalErrors = 0;
