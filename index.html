@@ -32,6 +32,13 @@
       color: white;
     }
     
+    .smallButton {
+      font-size: 18px;
+      padding: 15px;
+      width: 60%;
+      max-width: 200px;
+    }
+    
     #clearButton {
       font-size: 16px;
       padding: 10px;
@@ -60,10 +67,19 @@
   </div>
   
   <div>
+    <button id="errorZeroButton" class="smallButton">Error 0</button>
+    <button id="readerRebootButton" class="smallButton">Reader Reboot</button>
+    <button id="otherButton" class="smallButton">Other</button>
+  </div>
+  
+  <div>
     <canvas id="chart"></canvas>
     <div id="statistics">
       <p>Successful Swipes: <span id="successCount">0</span></p>
       <p>Error Swipes: <span id="errorCount">0</span></p>
+      <p>Error 0: <span id="errorZeroCount">0</span></p>
+      <p>Reader Reboots: <span id="readerRebootCount">0</span></p>
+      <p>Other: <span id="otherCount">0</span></p>
       <p>Success Rate: <span id="successRate">0</span>%</p>
     </div>
     <button id="clearButton">Clear Data</button>
@@ -73,13 +89,22 @@
   <script>
     let totalSwipes = parseInt(localStorage.getItem('totalSwipes')) || 0;
     let totalErrors = parseInt(localStorage.getItem('totalErrors')) || 0;
+    let errorZeroCount = parseInt(localStorage.getItem('errorZeroCount')) || 0;
+    let readerRebootCount = parseInt(localStorage.getItem('readerRebootCount')) || 0;
+    let otherCount = parseInt(localStorage.getItem('otherCount')) || 0;
 
     const swipeButton = document.getElementById('swipeButton');
     const errorButton = document.getElementById('errorButton');
+    const errorZeroButton = document.getElementById('errorZeroButton');
+    const readerRebootButton = document.getElementById('readerRebootButton');
+    const otherButton = document.getElementById('otherButton');
     const clearButton = document.getElementById('clearButton');
     const chartCanvas = document.getElementById('chart');
     const successCountElement = document.getElementById('successCount');
     const errorCountElement = document.getElementById('errorCount');
+    const errorZeroCountElement = document.getElementById('errorZeroCount');
+    const readerRebootCountElement = document.getElementById('readerRebootCount');
+    const otherCountElement = document.getElementById('otherCount');
     const successRateElement = document.getElementById('successRate');
 
     let chart;
@@ -89,10 +114,10 @@
       chart = new Chart(ctx, {
         type: 'pie',
         data: {
-          labels: ['Successful Swipes', 'Error Swipes'],
+          labels: ['Successful Swipes', 'Error Swipes', 'Error 0', 'Reader Reboots', 'Other'],
           datasets: [{
-            data: [totalSwipes, totalErrors],
-            backgroundColor: ['#4CAF50', '#FF0000']
+            data: [totalSwipes, totalErrors, errorZeroCount, readerRebootCount, otherCount],
+            backgroundColor: ['#4CAF50', '#FF0000', '#FFFF00', '#0000FF', '#800080']
           }]
         },
         options: {
@@ -102,14 +127,17 @@
     }
 
     function updateChart() {
-      chart.data.datasets[0].data = [totalSwipes, totalErrors];
+      chart.data.datasets[0].data = [totalSwipes, totalErrors, errorZeroCount, readerRebootCount, otherCount];
       chart.update();
     }
 
     function updateStatistics() {
       successCountElement.textContent = totalSwipes;
       errorCountElement.textContent = totalErrors;
-      const totalCount = totalSwipes + totalErrors;
+      errorZeroCountElement.textContent = errorZeroCount;
+      readerRebootCountElement.textContent = readerRebootCount;
+      otherCountElement.textContent = otherCount;
+      const totalCount = totalSwipes + totalErrors + errorZeroCount + readerRebootCount + otherCount;
       const successRate = totalCount > 0 ? ((totalSwipes / totalCount) * 100).toFixed(2) : 0;
       successRateElement.textContent = successRate;
     }
@@ -117,6 +145,9 @@
     function updateData() {
       localStorage.setItem('totalSwipes', totalSwipes);
       localStorage.setItem('totalErrors', totalErrors);
+      localStorage.setItem('errorZeroCount', errorZeroCount);
+      localStorage.setItem('readerRebootCount', readerRebootCount);
+      localStorage.setItem('otherCount', otherCount);
       updateChart();
       updateStatistics();
     }
@@ -131,9 +162,27 @@
       updateData();
     });
 
+    errorZeroButton.addEventListener('click', function() {
+      errorZeroCount++;
+      updateData();
+    });
+
+    readerRebootButton.addEventListener('click', function() {
+      readerRebootCount++;
+      updateData();
+    });
+
+    otherButton.addEventListener('click', function() {
+      otherCount++;
+      updateData();
+    });
+
     clearButton.addEventListener('click', function() {
       totalSwipes = 0;
       totalErrors = 0;
+      errorZeroCount = 0;
+      readerRebootCount = 0;
+      otherCount = 0;
       updateData();
     });
 
