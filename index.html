@@ -68,39 +68,58 @@
     #statistics {
       margin-top: 20px;
     }
+    .buttonContainer {
+      position: relative;
+      display: inline-block;
+    }
+    
     .popupIcon {
       position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 24px;
       color: white;
       opacity: 0;
-      transition: transform 0.5s, opacity 0.5s;
+      transition: opacity 0.5s;
       pointer-events: none;
     }
     
     .popupIcon.show {
       opacity: 1;
-      transform: translateY(-30px);
     }
   </style>
 </head>
 <body>
    <h1>Card Reader Tally</h1>
   
+  <div  
   <div>
-    <button id="swipeButton">Successful Swipe</button>
-    <span id="swipePopupIcon" class="popupIcon">+1</span>
-    <button id="errorButton">Error Swipe</button>
-    <span id="errorPopupIcon" class="popupIcon">+1</span>
+    <div class="buttonContainer">
+      <button id="swipeButton">Successful Swipe</button>
+      <span id="swipePopupIcon" class="popupIcon">+1</span>
+    </div>
+    <div class="buttonContainer">
+      <button id="errorButton">Error Swipe</button>
+      <span id="errorPopupIcon" class="popupIcon">+1</span>
+    </div>
   </div>
   
   <div>
-    <button id="errorZeroButton" class="smallButton">Error 0</button>
-    <span id="errorZeroPopupIcon" class="popupIcon">+1</span>
-    <button id="readerRebootButton" class="smallButton">Reader Reboot</button>
-    <span id="readerRebootPopupIcon" class="popupIcon">+1</span>
-    <button id="otherButton" class="smallButton">Other</button>
-    <span id="otherPopupIcon" class="popupIcon">+1</span>
+    <div class="buttonContainer">
+      <button id="errorZeroButton" class="smallButton">Error 0</button>
+      <span id="errorZeroPopupIcon" class="popupIcon">+1</span>
+    </div>
+    <div class="buttonContainer">
+      <button id="readerRebootButton" class="smallButton">Reader Reboot</button>
+      <span id="readerRebootPopupIcon" class="popupIcon">+1</span>
+    </div>
+    <div class="buttonContainer">
+      <button id="otherButton" class="smallButton">Other</button>
+      <span id="otherPopupIcon" class="popupIcon">+1</span>
+    </div>
   </div>
+  
   
   <div>
     <canvas id="chart"></canvas>
