@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Card Reader Tally</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -19,6 +19,7 @@
       cursor: pointer;
       width: 80%;
       max-width: 300px;
+      touch-action: manipulation;
     }
     
     #swipeButton {
@@ -44,6 +45,10 @@
       height: 300px;
       margin: 0 auto;
     }
+    
+    #statistics {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -56,18 +61,26 @@
   
   <div>
     <canvas id="chart"></canvas>
+    <div id="statistics">
+      <p>Successful Swipes: <span id="successCount">0</span></p>
+      <p>Error Swipes: <span id="errorCount">0</span></p>
+      <p>Success Rate: <span id="successRate">0</span>%</p>
+    </div>
     <button id="clearButton">Clear Data</button>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    let totalSwipes = localStorage.getItem('totalSwipes') || 0;
-    let totalErrors = localStorage.getItem('totalErrors') || 0;
+    let totalSwipes = parseInt(localStorage.getItem('totalSwipes')) || 0;
+    let totalErrors = parseInt(localStorage.getItem('totalErrors')) || 0;
 
     const swipeButton = document.getElementById('swipeButton');
     const errorButton = document.getElementById('errorButton');
     const clearButton = document.getElementById('clearButton');
     const chartCanvas = document.getElementById('chart');
+    const successCountElement = document.getElementById('successCount');
+    const errorCountElement = document.getElementById('errorCount');
+    const successRateElement = document.getElementById('successRate');
 
     swipeButton.addEventListener('click', function() {
       totalSwipes++;
@@ -89,6 +102,7 @@
       localStorage.setItem('totalSwipes', totalSwipes);
       localStorage.setItem('totalErrors', totalErrors);
       updateChart();
+      updateStatistics();
     }
 
     function updateChart() {
@@ -108,7 +122,16 @@
       });
     }
 
+    function updateStatistics() {
+      successCountElement.textContent = totalSwipes;
+      errorCountElement.textContent = totalErrors;
+      const totalCount = totalSwipes + totalErrors;
+      const successRate = totalCount > 0 ? ((totalSwipes / totalCount) * 100).toFixed(2) : 0;
+      successRateElement.textContent = successRate;
+    }
+
     updateChart();
+    updateStatistics();
   </script>
 </body>
 </html>
