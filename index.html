@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE<!DOCTYPE html>
 <html>
 <head>
   <title>Card Reader Tally</title>
@@ -20,16 +20,28 @@
       width: 80%;
       max-width: 300px;
       touch-action: manipulation;
+      color: white;
     }
     
     #swipeButton {
       background-color: #4CAF50;
-      color: white;
     }
     
     #errorButton {
       background-color: #FF0000;
-      color: white;
+    }
+    
+    #errorZeroButton {
+      background-color: #FFFF00;
+      color: black;
+    }
+    
+    #readerRebootButton {
+      background-color: #0000FF;
+    }
+    
+    #otherButton {
+      background-color: #800080;
     }
     
     .smallButton {
@@ -84,7 +96,7 @@
     </div>
     <button id="clearButton">Clear Data</button>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     let totalSwipes = parseInt(localStorage.getItem('totalSwipes')) || 0;
