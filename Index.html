@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Card Reader Tally</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    button {
+      font-size: 24px;
+      padding: 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 300px;
+    }
+    
+    #swipeButton {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    #errorButton {
+      background-color: #FF0000;
+      color: white;
+    }
+    
+    #clearButton {
+      font-size: 16px;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: #F0F0F0;
+      color: #333;
+    }
+    
+    #chart {
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Card Reader Tally</h1>
+  
+  <div>
+    <button id="swipeButton">Successful Swipe</button>
+    <button id="errorButton">Error Swipe</button>
+  </div>
+  
+  <div>
+    <canvas id="chart"></canvas>
+    <button id="clearButton">Clear Data</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let totalSwipes = localStorage.getItem('totalSwipes') || 0;
+    let totalErrors = localStorage.getItem('totalErrors') || 0;
+
+    const swipeButton = document.getElementById('swipeButton');
+    const errorButton = document.getElementById('errorButton');
+    const clearButton = document.getElementById('clearButton');
+    const chartCanvas = document.getElementById('chart');
+
+    swipeButton.addEventListener('click', function() {
+      totalSwipes++;
+      updateData();
+    });
+
+    errorButton.addEventListener('click', function() {
+      totalErrors++;
+      updateData();
+    });
+
+    clearButton.addEventListener('click', function() {
+      totalSwipes = 0;
+      totalErrors = 0;
+      updateData();
+    });
+
+    function updateData() {
+      localStorage.setItem('totalSwipes', totalSwipes);
+      localStorage.setItem('totalErrors', totalErrors);
+      updateChart();
+    }
+
+    function updateChart() {
+      const ctx = chartCanvas.getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Successful Swipes', 'Error Swipes'],
+          datasets: [{
+            data: [totalSwipes, totalErrors],
+            backgroundColor: ['#4CAF50', '#FF0000']
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+    }
+
+    updateChart();
+  </script>
+</body>
+</html>
