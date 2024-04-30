@@ -82,6 +82,45 @@
     const errorCountElement = document.getElementById('errorCount');
     const successRateElement = document.getElementById('successRate');
 
+    let chart;
+
+    function createChart() {
+      const ctx = chartCanvas.getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Successful Swipes', 'Error Swipes'],
+          datasets: [{
+            data: [totalSwipes, totalErrors],
+            backgroundColor: ['#4CAF50', '#FF0000']
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+    }
+
+    function updateChart() {
+      chart.data.datasets[0].data = [totalSwipes, totalErrors];
+      chart.update();
+    }
+
+    function updateStatistics() {
+      successCountElement.textContent = totalSwipes;
+      errorCountElement.textContent = totalErrors;
+      const totalCount = totalSwipes + totalErrors;
+      const successRate = totalCount > 0 ? ((totalSwipes / totalCount) * 100).toFixed(2) : 0;
+      successRateElement.textContent = successRate;
+    }
+
+    function updateData() {
+      localStorage.setItem('totalSwipes', totalSwipes);
+      localStorage.setItem('totalErrors', totalErrors);
+      updateChart();
+      updateStatistics();
+    }
+
     swipeButton.addEventListener('click', function() {
       totalSwipes++;
       updateData();
@@ -98,39 +137,7 @@
       updateData();
     });
 
-    function updateData() {
-      localStorage.setItem('totalSwipes', totalSwipes);
-      localStorage.setItem('totalErrors', totalErrors);
-      updateChart();
-      updateStatistics();
-    }
-
-    function updateChart() {
-      const ctx = chartCanvas.getContext('2d');
-      new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: ['Successful Swipes', 'Error Swipes'],
-          datasets: [{
-            data: [totalSwipes, totalErrors],
-            backgroundColor: ['#4CAF50', '#FF0000']
-          }]
-        },
-        options: {
-          responsive: true
-        }
-      });
-    }
-
-    function updateStatistics() {
-      successCountElement.textContent = totalSwipes;
-      errorCountElement.textContent = totalErrors;
-      const totalCount = totalSwipes + totalErrors;
-      const successRate = totalCount > 0 ? ((totalSwipes / totalCount) * 100).toFixed(2) : 0;
-      successRateElement.textContent = successRate;
-    }
-
-    updateChart();
+    createChart();
     updateStatistics();
   </script>
 </body>
